@@ -1,35 +1,25 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from "./assets/vite.svg";
-
-import './App.css'
+import { Routes, Route } from 'react-router-dom'
+import Navbar from './components/Navbar.jsx'
+import PostList from './components/PostList.jsx'
+import AddPost from './components/AddPost.jsx'
+import EditPost from './components/EditPost.jsx'
+import PostDetails from './components/PostDetails.jsx'
+import FavoritePosts from './components/FavoritePosts.jsx'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="min-h-screen bg-gray-900 text-gray-100">
+      <Navbar />
+      <div className="container mx-auto p-4">
+        <Routes>
+          <Route path="/" element={<PostList />} />
+          <Route path="/add" element={<AddPost />} />
+          <Route path="/edit/:id" element={<EditPost />} />
+          <Route path="/post/:id" element={<PostDetails />} />
+          <Route path="/favorites" element={<FavoritePosts />} />
+        </Routes>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </div>
   )
 }
 
