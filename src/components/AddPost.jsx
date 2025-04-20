@@ -10,11 +10,12 @@ function AddPost() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const newPost = { title, content, author, isFavorite: false };
     try {
       const response = await fetch('http://localhost:3000/posts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, content, author, isFavorite: false }),
+        body: JSON.stringify(newPost),
       });
       if (!response.ok) throw new Error('Failed to add post');
       navigate('/');
