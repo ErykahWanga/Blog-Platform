@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function AddPost() {
+<<<<<<< HEAD
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [author, setAuthor] = useState('');
@@ -28,6 +29,28 @@ function AddPost() {
       <h1 className="text-3xl font-bold text-white mb-6">Add New Post</h1>
       {error && <div className="text-red-500 mb-4">{error}</div>}
       <div className="bg-gray-800 p-6 rounded shadow border border-gray-700">
+=======
+  const [title, setTitle] = useState('')
+  const [content, setContent] = useState('')
+  const [author, setAuthor] = useState('')
+  const navigate = useNavigate()
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    const newPost = { title, content, author, isFavorite: false }
+    await fetch('http://localhost:3000/posts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newPost)
+    })
+    navigate('/')
+  }
+
+  return (
+    <div className="max-w-lg mx-auto bg-gray-800 p-6 rounded shadow border border-gray-700">
+      <h1 className="text-2xl font-bold text-white mb-4">Add New Post</h1>
+      <form onSubmit={handleSubmit}>
+>>>>>>> origin/brian
         <div className="mb-4">
           <label className="block text-gray-300 mb-2" htmlFor="title">Title</label>
           <input
@@ -35,7 +58,11 @@ function AddPost() {
             id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+<<<<<<< HEAD
             className="w-full p-2 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+=======
+            className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600"
+>>>>>>> origin/brian
             required
           />
         </div>
@@ -45,8 +72,12 @@ function AddPost() {
             id="content"
             value={content}
             onChange={(e) => setContent(e.target.value)}
+<<<<<<< HEAD
             className="w-full p-2 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
             rows="5"
+=======
+            className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600"
+>>>>>>> origin/brian
             required
           />
         </div>
@@ -57,6 +88,7 @@ function AddPost() {
             id="author"
             value={author}
             onChange={(e) => setAuthor(e.target.value)}
+<<<<<<< HEAD
             className="w-full p-2 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
@@ -68,6 +100,14 @@ function AddPost() {
           Add Post
         </button>
       </div>
+=======
+            className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600"
+            required
+          />
+        </div>
+        <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">Add Post</button>
+      </form>
+>>>>>>> origin/brian
     </div>
   );
 }

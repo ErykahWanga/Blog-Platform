@@ -1,0 +1,10 @@
+[33mdd7d1d7[m[33m ([m[1;36mHEAD[m[33m)[m Add PostList component to fetch and display blog posts
+[33m425a1b4[m Implement AddPost component for creating new blog posts with title, content, and author fields
+[33maf5c2be[m Add AddPost component for creating new blog posts
+[33m1978d6c[m[33m ([m[1;31morigin/brian[m[33m)[m new changes
+[33m09f2502[m new message
+[33mf478e40[m[33m ([m[1;31morigin/vincent[m[33m, [m[1;31morigin/rayjon-karuga[m[33m, [m[1;32mmain[m[33m)[m new message
+[33m0ed885b[m basic html
+[33m2b5a14a[m Migrated project to Vite setup and updated component structure
+[33mc82941c[m first commit
+[33m4690a24[m first commit
