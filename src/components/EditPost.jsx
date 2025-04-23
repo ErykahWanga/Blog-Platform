@@ -1,75 +1,98 @@
-import { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 
 function EditPost() {
-  const { id } = useParams()
-  const navigate = useNavigate()
-  const [post, setPost] = useState({ title: '', author: '', content: '', isFavorite: false })
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [author, setAuthor] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/posts/${id}`)
-      .then(res => res.json())
-      .then(data => setPost(data))
-  }, [id])
+    const fetchPost = async () => {
+      try {
+        const response = await fetch(`http://localhost:3000/posts/${id}`);
+        if (!response.ok) throw new Error('Failed to fetch post');
+        const data = await response.json();
+        setTitle(data.title);
+        setContent(data.content);
+        setAuthor(data.author);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+    fetchPost();
+  }, [id]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    fetch(`http://localhost:3000/posts/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(post)
-    })
-      .then(() => navigate('/'))
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(`http://localhost:3000/posts/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, content, author }),
+      });
+      if (!response.ok) throw new Error('Failed to update post');
+      navigate('/');
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  if (loading) return <div className="text-gray-300 text-center mt-10">Loading...</div>;
+  if (error) return <div className="text-red-500 text-center mt-10">Error: {error}</div>;
 
   return (
-    <div className="pt-20">
-      <h1 className="text-2xl font-bold mb-4">Edit Post</h1>
-      <form onSubmit={handleSubmit} className="max-w-lg p-4 border rounded bg-gray-800">
+    <div className="max-w-lg mx-auto p-4">
+      <h1 className="text-3xl font-bold text-white mb-6">Edit Post</h1>
+      {error && <div className="text-red-500 mb-4">{error}</div>}
+      <div className="bg-gray-800 p-6 rounded shadow border border-gray-700">
         <div className="mb-4">
-          <label className="block text-gray-300">Title</label>
+          <label className="block text-gray-300 mb-2" htmlFor="title">Title</label>
           <input
             type="text"
-            value={post.title}
-            onChange={e => setPost({ ...post, title: e.target.value })}
-            className="border p-2 w-full bg-gray-700 text-white rounded"
+            id="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="w-full p-2 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
         </div>
         <div className="mb-4">
-          <label className="block text-gray-300">Author</label>
-          <input
-            type="text"
-            value={post.author}
-            onChange={e => setPost({ ...post, author: e.target.value })}
-            className="border p-2 w-full bg-gray-700 text-white rounded"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-300">Content</label>
+          <label className="block text-gray-300 mb-2" htmlFor="content">Content</label>
           <textarea
-            value={post.content}
-            onChange={e => setPost({ ...post, content: e.target.value })}
-            className="border p-2 w-full bg-gray-700 text-white rounded"
+            id="content"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            className="w-full p-2 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            rows="5"
             required
           />
         </div>
         <div className="mb-4">
-          <label className="flex items-center text-gray-300">
-            <input
-              type="checkbox"
-              checked={post.isFavorite}
-              onChange={e => setPost({ ...post, isFavorite: e.target.checked })}
-              className="mr-2"
-            />
-            Favorite
-          </label>
+          <label className="block text-gray-300 mb-2" htmlFor="author">Author</label>
+          <input
+            type="text"
+            id="author"
+            value={author}
+            onChange={(e) => setAuthor(e.target.value)}
+            className="w-full p-2 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
         </div>
-        <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">Save</button>
-      </form>
+        <button
+          onClick={handleSubmit}
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+        >
+          Update Post
+        </button>
+      </div>
     </div>
-  )
+  );
 }
 
-export default EditPost
+export default EditPost;

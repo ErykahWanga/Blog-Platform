@@ -1,53 +1,53 @@
-import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 function FavoritePosts() {
-  const [favorites, setFavorites] = useState([])
+  const [favorites, setFavorites] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:3000/posts?isFavorite=true')
-      .then(res => res.json())
-      .then(data => setFavorites(data))
-  }, [])
+    const fetchFavorites = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/posts');
+        if (!response.ok) throw new Error('Failed to fetch posts');
+        const data = await response.json();
+        const favoritePosts = data.filter(post => post.isFavorite);
+        setFavorites(favoritePosts);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+    fetchFavorites();
+  }, []);
 
-  const handleDelete = (id) => {
-    fetch(`http://localhost:3000/posts/${id}`, { method: 'DELETE' })
-      .then(() => setFavorites(favorites.filter(post => post.id !== id)))
-  }
-
-  const handleFavorite = (id, isFavorite) => {
-    fetch(`http://localhost:3000/posts/${id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ isFavorite: !isFavorite })
-    })
-      .then(() => setFavorites(favorites.filter(post => post.id !== id)))
-  }
+  if (loading) return <div className="text-gray-300 text-center mt-10">Loading...</div>;
+  if (error) return <div className="text-red-500 text-center mt-10">Error: {error}</div>;
 
   return (
-    <div className="pt-20">
-      <h1 className="text-2xl font-bold mb-4">Favorite Posts</h1>
+    <div className="max-w-6xl mx-auto p-4">
+      <h1 className="text-3xl font-bold text-white mb-6">Favorite Posts</h1>
       {favorites.length === 0 ? (
-        <p className="text-gray-300">No favorites yet.</p>
+        <p className="text-gray-400">No favorite posts yet.</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {favorites.map(post => (
-            <div key={post.id} className="border p-4 rounded shadow bg-gray-800">
-              <h2 className="text-xl font-semibold">{post.title}</h2>
+            <div key={post.id} className="bg-gray-800 p-4 rounded shadow border border-gray-700">
+              <h2 className="text-xl font-semibold text-white">{post.title}</h2>
               <p className="text-gray-400">By {post.author}</p>
-              <p>❤️</p>
-              <div className="flex space-x-2 mt-2">
-                <Link to={`/post/${post.id}`} className="bg-blue-500 text-white px-4 py-2 rounded">View</Link>
-                <Link to={`/edit/${post.id}`} className="bg-yellow-500 text-white px-4 py-2 rounded">Edit</Link>
-                <button onClick={() => handleDelete(post.id)} className="bg-red-500 text-white px-4 py-2 rounded">Delete</button>
-                <button onClick={() => handleFavorite(post.id, post.isFavorite)} className="bg-purple-500 text-white px-4 py-2 rounded">Unfavorite</button>
+              <div className="mt-4">
+                <Link to={`/post/${post.id}`} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                  View
+                </Link>
               </div>
             </div>
           ))}
         </div>
       )}
     </div>
-  )
+  );
 }
 
-export default FavoritePosts
+export default FavoritePosts;
