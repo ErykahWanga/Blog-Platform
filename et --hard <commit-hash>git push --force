@@ -1,0 +1,59 @@
+[33mcommit dd7d1d7a051bb7721047d3ad1ffc3d82184925c2[m[33m ([m[1;36mHEAD[m[33m)[m
+Author: Erykah <erkahwanga@gmail.com>
+Date:   Sun Apr 20 16:40:07 2025 +0300
+
+    Add PostList component to fetch and display blog posts
+
+[33mcommit 425a1b47ef44e2838c7ed715990ed5e00503fe82[m
+Author: Erykah <erkahwanga@gmail.com>
+Date:   Sun Apr 20 16:37:54 2025 +0300
+
+    Implement AddPost component for creating new blog posts with title, content, and author fields
+
+[33mcommit af5c2be8c231cf781853b578e55b3711f35cad25[m
+Author: Erykah <erkahwanga@gmail.com>
+Date:   Sun Apr 20 16:37:22 2025 +0300
+
+    Add AddPost component for creating new blog posts
+
+[33mcommit 1978d6c4d3314b19326620c39692a9365c80fbbc[m[33m ([m[1;31morigin/brian[m[33m)[m
+Author: brian <githinjibrian700@gmail.com>
+Date:   Wed Apr 23 11:25:07 2025 +0300
+
+    new changes
+
+[33mcommit 09f25020692354822824aef47e0119b76585de05[m
+Author: brian <githinjibrian700@gmail.com>
+Date:   Tue Apr 22 12:02:26 2025 +0300
+
+    new message
+
+[33mcommit f478e40bc8c8005f7b92eb4826fe607edd16f59f[m[33m ([m[1;31morigin/vincent[m[33m, [m[1;31morigin/rayjon-karuga[m[33m, [m[1;32mmain[m[33m)[m
+Author: brian <githinjibrian700@gmail.com>
+Date:   Sun Apr 20 10:16:16 2025 +0300
+
+    new message
+
+[33mcommit 0ed885b1abbdae495867e01d5d7e328b64234abf[m
+Author: Erykah <erkahwanga@gmail.com>
+Date:   Sun Apr 20 08:19:32 2025 +0300
+
+    basic html
+
+[33mcommit 2b5a14a1ca63d619aeb4a2b9acbd6e764d64b4e4[m
+Author: Erykah <erkahwanga@gmail.com>
+Date:   Sun Apr 20 07:44:07 2025 +0300
+
+    Migrated project to Vite setup and updated component structure
+
+[33mcommit c82941ca76469bd9096c86962142ee362315d970[m
+Author: Erykah <erkahwanga@gmail.com>
+Date:   Wed Apr 16 15:42:44 2025 +0300
+
+    first commit
+
+[33mcommit 4690a242b75b090085410f652fda43ab5dff8e44[m
+Author: Erykah <erkahwanga@gmail.com>
+Date:   Wed Apr 16 15:37:45 2025 +0300
+
+    first commit
