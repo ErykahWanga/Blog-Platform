@@ -1,0 +1,81 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "title": "Exploring the Cosmos",
+      "content": "A deep dive into the mysteries of the universe, from black holes to distant galaxies.",
+      "author": "Carl Sagan",
+      "isFavorite": false
+    },
+    {
+      "id": 2,
+      "title": "The Art of Baking Bread",
+      "content": "Learn the secrets to baking the perfect sourdough loaf at home.",
+      "author": "Emma Baker",
+      "isFavorite": true
+    },
+    {
+      "id": 3,
+      "title": "Hiking in the Alps",
+      "content": "A personal journey through the breathtaking trails of the Swiss Alps.",
+      "author": "Alex Johnson",
+      "isFavorite": true
+    },
+    {
+      "id": 4,
+      "title": "Introduction to Python Programming",
+      "content": "A beginner's guide to writing your first Python program.",
+      "author": "Sarah Coder",
+      "isFavorite": false
+    },
+    {
+      "id": 5,
+      "title": "The Future of AI",
+      "content": "How artificial intelligence is shaping industries and our daily lives.",
+      "author": "Dr. Maria Tech",
+      "isFavorite": true
+    },
+    {
+      "id": 6,
+      "title": "Gardening Tips for Beginners",
+      "content": "Essential advice for starting your own vegetable garden.",
+      "author": "Lily Green",
+      "isFavorite": false
+    },
+    {
+      "id": 7,
+      "title": "A Guide to Minimalist Living",
+      "content": "Simplify your life with these minimalist principles and practices.",
+      "author": "James Clear",
+      "isFavorite": true
+    },
+    {
+      "id": 8,
+      "title": "Top 10 Sci-Fi Books of All Time",
+      "content": "A curated list of must-read science fiction novels for enthusiasts.",
+      "author": "Isaac Asimov",
+      "isFavorite": false
+    },
+    {
+      "id": 9,
+      "title": "Photography Basics",
+      "content": "Master the fundamentals of photography, from lighting to composition.",
+      "author": "Anna Shutter",
+      "isFavorite": true
+    },
+    {
+      "id": 10,
+      "title": "Traveling on a Budget",
+      "content": "Tips and tricks for exploring the world without breaking the bank.",
+      "author": "Sam Wanderer",
+      "isFavorite": false
+    },
+    {
+      "title": "uvuvuvv",
+      "content": "ojj9ubuu",
+      "author": "jnjn",
+      "isFavorite": false,
+      "id": 11
+    }
+  ]
+}
