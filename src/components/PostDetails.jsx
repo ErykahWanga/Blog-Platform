@@ -54,7 +54,7 @@ function PostDetails() {
             onClick={handleFavorite}
             className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600"
           >
-            {post.isFavorite ? '❤️ Unfavorite' : '🤍 Favorite'}
+            {post.isFavorite ? ' Unfavorite' : ' Favorite'}
           </button>
         </div>
       </div>

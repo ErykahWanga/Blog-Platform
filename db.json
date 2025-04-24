@@ -12,11 +12,7 @@
       "title": "The Art of Baking Bread",
       "content": "Learn the secrets to baking the perfect sourdough loaf at home.",
       "author": "Emma Baker",
-<<<<<<< HEAD
-      "isFavorite": false
-=======
       "isFavorite": true
->>>>>>> origin/brian
     },
     {
       "id": 3,
@@ -37,11 +33,7 @@
       "title": "The Future of AI",
       "content": "How artificial intelligence is shaping industries and our daily lives.",
       "author": "Dr. Maria Tech",
-<<<<<<< HEAD
-      "isFavorite": false
-=======
       "isFavorite": true
->>>>>>> origin/brian
     },
     {
       "id": 6,
