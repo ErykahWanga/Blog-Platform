@@ -1,24 +1,14 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FaPlus } from 'react-icons/fa'; 
 
 function AddPost() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [author, setAuthor] = useState('');
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState('');
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImage(reader.result); // base64 encoded image
-      };
-      reader.readAsDataURL(file);
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,7 +16,7 @@ function AddPost() {
       const response = await fetch('http://localhost:3000/posts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, content, author, image, isFavorite: false }),
+        body: JSON.stringify({ title, content, author, image, isFavorite: false, comments: [] }),
       });
       if (!response.ok) throw new Error('Failed to add post');
       navigate('/');
@@ -42,7 +32,9 @@ function AddPost() {
       <div className="bg-gray-800 p-6 rounded shadow border border-gray-700">
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-gray-300 mb-2" htmlFor="title">Title</label>
+            <label className="block text-gray-300 mb-2" htmlFor="title">
+              Title
+            </label>
             <input
               type="text"
               id="title"
@@ -53,7 +45,9 @@ function AddPost() {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-300 mb-2" htmlFor="content">Content</label>
+            <label className="block text-gray-300 mb-2" htmlFor="content">
+              Content
+            </label>
             <textarea
               id="content"
               value={content}
@@ -64,7 +58,9 @@ function AddPost() {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-300 mb-2" htmlFor="author">Author</label>
+            <label className="block text-gray-300 mb-2" htmlFor="author">
+              Author
+            </label>
             <input
               type="text"
               id="author"
@@ -75,23 +71,25 @@ function AddPost() {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-300 mb-2" htmlFor="image">Image</label>
+            <label className="block text-gray-300 mb-2" htmlFor="image">
+              Image URL
+            </label>
             <input
-              type="file"
+              type="url"
               id="image"
-              accept="image/*"
-              onChange={handleImageChange}
-              className="w-full text-white"
+              value={image}
+              onChange={(e) => setImage(e.target.value)}
+              className="w-full p-2 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="https://example.com/image.jpg"
+              required
             />
-            {image && (
-              <img src={image} alt="Preview" className="mt-4 rounded shadow-md max-h-48" />
-            )}
           </div>
           <button
             type="submit"
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 flex items-center space-x-2"
           >
-            Add Post
+            <FaPlus />
+            <span>Submit</span>
           </button>
         </form>
       </div>
