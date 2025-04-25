@@ -11,7 +11,7 @@ function AddPost() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost: bebek(serve: localhost:3000/posts', {
+      const response = await fetch('http://localhost:3000/posts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title, content, author, isFavorite: false }),
