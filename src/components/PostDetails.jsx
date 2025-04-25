@@ -6,11 +6,12 @@ function PostDetails() {
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isUpdatingFavorite, setIsUpdatingFavorite] = useState(false);
 
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await fetch(`https://json-server-vercel-git-main-erykahwangas-projects.vercel.app/posts${id}`);
+        const response = await fetch(`https://json-server-vercel-git-main-erykahwangas-projects.vercel.app/posts/${id}`);
         if (!response.ok) throw new Error('Failed to fetch post');
         const data = await response.json();
         setPost(data);
@@ -24,15 +25,19 @@ function PostDetails() {
   }, [id]);
 
   const handleFavorite = async () => {
+    setIsUpdatingFavorite(true);
     try {
-      await fetch(`https://json-server-vercel-git-main-erykahwangas-projects.vercel.app/posts${id}`, {
+      await fetch(`https://json-server-vercel-git-main-erykahwangas-projects.vercel.app/posts/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ isFavorite: !post.isFavorite }),
       });
+      // Update state only after the API call succeeds
       setPost({ ...post, isFavorite: !post.isFavorite });
     } catch (err) {
       setError('Failed to update favorite');
+    } finally {
+      setIsUpdatingFavorite(false);
     }
   };
 
@@ -52,9 +57,20 @@ function PostDetails() {
           </Link>
           <button
             onClick={handleFavorite}
-            className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600"
+            disabled={isUpdatingFavorite}
+            className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 flex items-center space-x-2"
           >
-            {post.isFavorite ? ' Unfavorite' : ' Favorite'}
+            {isUpdatingFavorite ? (
+              <span>Updating...</span>
+            ) : post.isFavorite ? (
+              <>
+                <span>Unfavorite</span>
+              </>
+            ) : (
+              <>
+                <span>Favorite</span>
+              </>
+            )}
           </button>
         </div>
       </div>
