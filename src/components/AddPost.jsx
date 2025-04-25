@@ -1,101 +1,103 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { FaPlus } from 'react-icons/fa';
 
-function AddPost() {
+function AddPost({ onAddPost }) {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [author, setAuthor] = useState('');
   const [image, setImage] = useState('');
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
+
+  const API_URL = 'https://json-server-vercel-zeta-five.vercel.app/api/posts'; // Updated to new deployment URL
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const newPost = {
+      title,
+      content,
+      author,
+      image: image || undefined,
+      isFavorite: false,
+      comments: [],
+    };
+
     try {
-      const response = await fetch('http://localhost:3000/posts', {
+      const response = await fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, content, author, image, isFavorite: false, comments: [] }),
+        body: JSON.stringify(newPost),
       });
+
       if (!response.ok) {
         throw new Error(`Failed to add post: ${response.status} ${response.statusText}`);
       }
-      navigate('/');
+
+      const addedPost = await response.json();
+      onAddPost(addedPost);
+      setTitle('');
+      setContent('');
+      setAuthor('');
+      setImage('');
+      setError(null);
     } catch (err) {
-      console.error('Submit error:', err);
+      console.error('Add post error:', err);
       setError(err.message);
     }
   };
 
   return (
-    <div className="max-w-lg mx-auto p-4">
-      <h1 className="text-3xl font-bold text-white mb-6">Add New Post</h1>
+    <div className="p-4">
+      <h2 className="text-2xl font-bold text-white mb-4">Add a New Post</h2>
       {error && <div className="text-red-500 mb-4">{error}</div>}
-      <div className="bg-gray-800 p-6 rounded shadow border border-gray-700">
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-gray-300 mb-2" htmlFor="title">
-              Title
-            </label>
-            <input
-              type="text"
-              id="title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="w-full p-2 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-300 mb-2" htmlFor="content">
-              Content
-            </label>
-            <textarea
-              id="content"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              className="w-full p-2 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              rows="5"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-300 mb-2" htmlFor="author">
-              Author
-            </label>
-            <input
-              type="text"
-              id="author"
-              value={author}
-              onChange={(e) => setAuthor(e.target.value)}
-              className="w-full p-2 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-300 mb-2" htmlFor="image">
-              Image URL
-            </label>
-            <input
-              type="url"
-              id="image"
-              value={image}
-              onChange={(e) => setImage(e.target.value)}
-              className="w-full p-2 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="https://example.com/image.jpg"
-              required
-            />
-          </div>
-          <button
-            type="submit"
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 flex items-center space-x-2"
-          >
-            <FaPlus />
-            <span>Submit</span>
-          </button>
-        </form>
-      </div>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <input
+            type="text"
+            placeholder="Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="w-full p-2 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
+        </div>
+        <div>
+          <textarea
+            placeholder="Content"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            className="w-full p-2 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            rows="4"
+            required
+          />
+        </div>
+        <div>
+          <input
+            type="text"
+            placeholder="Author"
+            value={author}
+            onChange={(e) => setAuthor(e.target.value)}
+            className="w-full p-2 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
+        </div>
+        <div>
+          <input
+            type="url"
+            placeholder="Image URL (optional)"
+            value={image}
+            onChange={(e) => setImage(e.target.value)}
+            className="w-full p-2 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <button
+          type="submit"
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 flex items-center space-x-2"
+        >
+          <FaPlus />
+          <span>Add Post</span>
+        </button>
+      </form>
     </div>
   );
 }

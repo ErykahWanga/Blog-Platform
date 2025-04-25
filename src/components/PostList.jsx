@@ -9,20 +9,26 @@ function PostList() {
   const [newComment, setNewComment] = useState({});
   const [editingPost, setEditingPost] = useState(null);
   const [editForm, setEditForm] = useState({ title: '', content: '', author: '', image: '' });
-  const [expandedPosts, setExpandedPosts] = useState({}); // Track which posts are expanded
+  const [expandedPosts, setExpandedPosts] = useState({});
+
+  const API_URL = 'https://json-server-vercel-zeta-five.vercel.app/api/posts'; // Updated to new deployment URL
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await fetch('http://localhost:3000/posts');
+        const response = await fetch(API_URL);
         if (!response.ok) {
-          throw new Error(`Failed to fetch posts: ${response.status} ${response.statusText}`);
+          const errorText = await response.text();
+          throw new Error(`Failed to fetch posts: ${response.status} ${response.statusText} - ${errorText}`);
         }
         const data = await response.json();
+        if (!Array.isArray(data)) {
+          throw new Error('Expected an array of posts, but received: ' + JSON.stringify(data));
+        }
         setPosts(data);
         setFilteredPosts(data);
       } catch (err) {
-        console.error('Fetch error:', err);
+        console.error('Fetch error details:', err);
         setError(err.message);
       }
     };
@@ -53,7 +59,7 @@ function PostList() {
     ];
 
     try {
-      const response = await fetch(`http://localhost:3000/posts/${postId}`, {
+      const response = await fetch(`${API_URL}/${postId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ comments: updatedComments }),
@@ -77,7 +83,7 @@ function PostList() {
     const updatedFavorite = !post.isFavorite;
 
     try {
-      const response = await fetch(`http://localhost:3000/posts/${postId}`, {
+      const response = await fetch(`${API_URL}/${postId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ isFavorite: updatedFavorite }),
@@ -107,7 +113,7 @@ function PostList() {
 
   const handleSaveEdit = async (postId) => {
     try {
-      const response = await fetch(`http://localhost:3000/posts/${postId}`, {
+      const response = await fetch(`${API_URL}/${postId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(editForm),
@@ -129,8 +135,9 @@ function PostList() {
 
   const handleDeletePost = async (postId) => {
     try {
-      const response = await fetch(`http://localhost:3000/posts/${postId}`, {
+      const response = await fetch(`${API_URL}/${postId}`, {
         method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
       });
       if (!response.ok) {
         throw new Error(`Failed to delete post: ${response.status} ${response.statusText}`);
