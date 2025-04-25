@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaPlus } from 'react-icons/fa'; 
+import { FaPlus } from 'react-icons/fa';
 
 function AddPost() {
   const [title, setTitle] = useState('');
@@ -18,9 +18,12 @@ function AddPost() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title, content, author, image, isFavorite: false, comments: [] }),
       });
-      if (!response.ok) throw new Error('Failed to add post');
+      if (!response.ok) {
+        throw new Error(`Failed to add post: ${response.status} ${response.statusText}`);
+      }
       navigate('/');
     } catch (err) {
+      console.error('Submit error:', err);
       setError(err.message);
     }
   };
