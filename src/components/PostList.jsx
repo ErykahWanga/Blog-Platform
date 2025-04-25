@@ -207,7 +207,6 @@ function PostList() {
         )}
         {filteredPosts.map((post) => (
           <div key={post.id} className="bg-gray-800 p-4 rounded-lg shadow border border-gray-700">
-          
             {editingPost === post.id ? (
               <div className="mb-4">
                 <input

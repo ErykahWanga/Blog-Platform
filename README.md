@@ -12,7 +12,7 @@ Responsive Design: Optimized for both desktop and mobile devices with a clean, d
 Live Demo
 
 Blog Platform: https://blog-nine-nu-48.vercel.app or https://blog-platform.vercel.app
-Backend API (JSON Server): https://json-server-vercel-five-jet.vercel.app/posts
+Backend API (JSON Server): https://json-server-vercel-last.vercel.app/posts
 
 Tech Stack
 
