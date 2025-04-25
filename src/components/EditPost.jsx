@@ -13,7 +13,7 @@ function EditPost() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/posts/${id}`);
+        const response = await fetch(`https://json-server-vercel-git-main-erykahwangas-projects.vercel.app/posts${id}`);
         if (!response.ok) throw new Error('Failed to fetch post');
         const data = await response.json();
         setTitle(data.title);
@@ -31,7 +31,7 @@ function EditPost() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`http://localhost:3000/posts/${id}`, {
+      const response = await fetch(`https://json-server-vercel-git-main-erykahwangas-projects.vercel.app/posts${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title, content, author }),

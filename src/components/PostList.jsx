@@ -11,7 +11,7 @@ function PostList() {
   const [editForm, setEditForm] = useState({ title: '', content: '', author: '', image: '' });
   const [expandedPosts, setExpandedPosts] = useState({});
 
-  const API_URL = 'https://json-server-vercel-five-jet.vercel.app/posts'
+  const API_URL = 'https://json-server-vercel-git-main-erykahwangas-projects.vercel.app/posts'
 ; 
 
   useEffect(() => {

@@ -8,7 +8,7 @@ function AddPost({ onAddPost }) {
   const [image, setImage] = useState('');
   const [error, setError] = useState(null);
 
-  const API_URL = 'https://json-server-vercel-five-jet.vercel.app/posts'
+  const API_URL = 'https://json-server-vercel-git-main-erykahwangas-projects.vercel.app/posts'
 ; 
 
   const handleSubmit = async (e) => {
