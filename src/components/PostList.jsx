@@ -11,7 +11,7 @@ function PostList() {
   const [editForm, setEditForm] = useState({ title: '', content: '', author: '', image: '' });
   const [expandedPosts, setExpandedPosts] = useState({});
 
-  const API_URL = 'https://json-server-vercel-zeta-five.vercel.app/api/posts'; // Updated to new deployment URL
+  const API_URL = 'https://json-server-vercel-zeta-five.vercel.app/api/posts'; // Updated to deployed JSON Server URL
 
   useEffect(() => {
     const fetchPosts = async () => {
