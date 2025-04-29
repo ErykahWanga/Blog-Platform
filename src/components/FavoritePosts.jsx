@@ -9,7 +9,7 @@ function FavoritePosts() {
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
-        const response = await fetch('https://json-server-vercel-last.vercel.app/posts');
+        const response = await fetch('https://json-server-vercel-last.vercel.app/posts/');
         if (!response.ok) throw new Error('Failed to fetch posts');
         const data = await response.json();
         const favoritePosts = data.filter(post => post.isFavorite);

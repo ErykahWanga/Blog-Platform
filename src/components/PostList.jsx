@@ -12,7 +12,7 @@ function PostList() {
   const [expandedPosts, setExpandedPosts] = useState({});
   const [loading, setLoading] = useState(true);
 
-  const API_URL = 'https://json-server-vercel-last.vercel.app/posts';
+  const API_URL = 'https://json-server-vercel-last.vercel.app/posts/';
 
   
   useEffect(() => {

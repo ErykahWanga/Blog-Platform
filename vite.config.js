@@ -1,5 +1,7 @@
-import react from '@vitejs/plugin-react'
+import { defineConfig } from "vite";
 
-export default {
-  plugins: [react()],
-}
+export default defineConfig({
+  css: {
+    postcss: "./postcss.config.js",
+  },
+});

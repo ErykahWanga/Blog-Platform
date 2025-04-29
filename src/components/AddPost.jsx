@@ -13,7 +13,7 @@ function AddPost({ onAddPost }) {
   const [isLoading, setIsLoading] = useState(false);
 
  
-  const API_URL = 'https://json-server-vercel-last.vercel.app/posts';
+  const API_URL = 'https://json-server-vercel-last.vercel.app/posts/';
 
   
   const handleSubmit = async (e) => {
