@@ -6,6 +6,7 @@ export default {
   ],
   	
 
+h
 
 
 
@@ -13,8 +14,7 @@ export default {
 
 
 
-
-theme: {
+: {
     extend: {
       keyframes: {
         'slide-in': {
