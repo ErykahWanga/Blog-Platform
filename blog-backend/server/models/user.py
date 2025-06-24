@@ -1,8 +1,7 @@
 # server/models/user.py
 
-from server.app import db
-from werkzeug.security import generate_password_hash, check_password_hash
 from server.extensions import db
+from werkzeug.security import generate_password_hash, check_password_hash
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -20,3 +19,10 @@ class User(db.Model):
 
     def __repr__(self):
         return f'<User {self.username}>'
+    
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "username": self.username,
+            "email": self.email
+        }
