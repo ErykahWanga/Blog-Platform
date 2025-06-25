@@ -1,3 +1,4 @@
+import React from 'react'; // ✅ Required for JSX in some tooling
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar.jsx';
 import PostList from './components/PostList.jsx';
