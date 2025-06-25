@@ -1,26 +1,41 @@
-import { Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar.jsx';
-import PostList from './components/PostList.jsx';
-import AddPost from './components/AddPost.jsx';
-import EditPost from './components/EditPost.jsx';
-import PostDetails from './components/PostDetails.jsx';
-import FavoritePosts from './components/FavoritePosts.jsx';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import './App.css';
 
 function App() {
-  return (
-    <div className="min-h-screen bg-gray-900 text-gray-100">
-      <Navbar />
-      <div className="container mx-auto p-4">
-        <Routes>
-          <Route path="/" element={<PostList />} />
-          <Route path="/add" element={<AddPost />} />
-          <Route path="/edit/:id" element={<EditPost />} />
-          <Route path="/post/:id" element={<PostDetails />} />
-          <Route path="/favorites" element={<FavoritePosts />} />
-        </Routes>
-      </div>
-    </div>
-  );
+    const [posts, setPosts] = useState([]);
+    const [userId] = useState(1);
+    const [message, setMessage] = useState('');
+    useEffect(() => {
+        setPosts([{ id: 1, title: 'Sample Post', content: 'This is a test post' }]);
+    }, []);
+    const toggleFavorite = async (postId) => {
+        try {
+            const response = await axios.post('http://localhost:5000/api/favorites/', {
+                user_id: userId,
+                post_id: postId,
+            });
+            setMessage(response.data.message);
+        } catch (err) {
+            setMessage('Error toggling favorite');
+        }
+    };
+    return (
+        <div className="app">
+            <h1>Blog Platform</h1>
+            <h2>Posts</h2>
+            <ul>
+                {posts.map(post => (
+                    <li key={post.id}>
+                        {post.title}
+                        <button onClick={() => toggleFavorite(post.id)}>
+                            {message.includes('favorited') ? 'Unfavorite' : 'Favorite'}
+                        </button>
+                    </li>
+                ))}
+            </ul>
+            {message && <p>{message}</p>}
+        </div>
+    );
 }
-
 export default App;
