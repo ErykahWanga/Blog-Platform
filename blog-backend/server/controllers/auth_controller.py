@@ -1,45 +1,42 @@
 from flask import Blueprint, request, jsonify
-from werkzeug.security import generate_password_hash, check_password_hash
-from flask_jwt_extended import create_access_token
-from datetime import timedelta
 from server.models.user import User
-from server.extensions import db
+from server.extensions import db, bcrypt, jwt
+from flask_jwt_extended import create_access_token
 
-auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
+auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
-# Signup route
-@auth_bp.route("/signup", methods=["POST"])
+@auth_bp.route('/signup', methods=['POST'])
 def signup():
     data = request.get_json()
-    username = data.get("username")
-    email = data.get("email")
-    password = data.get("password")
+    username = data.get('username')
+    email = data.get('email')
+    password = data.get('password')
 
     if not username or not email or not password:
-        return jsonify({"error": "All fields are required"}), 400
+        return jsonify({"error": "Missing username, email or password"}), 400
 
-    if User.query.filter_by(email=email).first():
-        return jsonify({"error": "Email already registered"}), 409
+    if User.query.filter((User.username == username) | (User.email == email)).first():
+        return jsonify({"error": "User with that username or email already exists"}), 409
 
-    hashed_pw = generate_password_hash(password)
-    new_user = User(username=username, email=email, password=hashed_pw)
-
-    db.session.add(new_user)
+    user = User(username=username, email=email)
+    user.set_password(password)
+    db.session.add(user)
     db.session.commit()
 
     return jsonify({"message": "User created successfully"}), 201
 
-# Login route
-@auth_bp.route("/login", methods=["POST"])
+@auth_bp.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
-    email = data.get("email")
-    password = data.get("password")
+    username = data.get('username')
+    password = data.get('password')
 
-    user = User.query.filter_by(email=email).first()
+    if not username or not password:
+        return jsonify({"error": "Missing username or password"}), 400
 
-    if user and check_password_hash(user.password, password):
-        access_token = create_access_token(identity=user.id, expires_delta=timedelta(days=1))
-        return jsonify({"access_token": access_token, "user": user.to_dict()}), 200
-    else:
-        return jsonify({"error": "Invalid email or password"}), 401
+    user = User.query.filter_by(username=username).first()
+    if not user or not user.check_password(password):
+        return jsonify({"error": "Invalid username or password"}), 401
+
+    access_token = create_access_token(identity=user.id)
+    return jsonify({"access_token": access_token}), 200
