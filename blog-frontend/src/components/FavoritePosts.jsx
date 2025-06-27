@@ -1,25 +1,34 @@
+import React from 'react';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 function FavoritePosts() {
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const token = localStorage.getItem('token');
+
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
-        const response = await fetch('https://json-server-vercel-last.vercel.app/posts/');
-        if (!response.ok) throw new Error('Failed to fetch posts');
-        const data = await response.json();
-        const favoritePosts = data.filter(post => post.isFavorite);
+        const response = await axios.get('http://127.0.0.1:5000/posts/', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const favoritePosts = response.data.filter((post) => post.is_favorite === true);
         setFavorites(favoritePosts);
-        setLoading(false);
       } catch (err) {
-        setError(err.message);
+        console.error('Favorite fetch error:', err);
+        setError('Failed to fetch favorite posts.');
+      } finally {
         setLoading(false);
       }
     };
+
     fetchFavorites();
   }, []);
 
@@ -47,7 +56,7 @@ function FavoritePosts() {
         </p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {favorites.map(post => (
+          {favorites.map((post) => (
             <div key={post.id} className="bg-gray-800 p-4 rounded shadow border border-gray-700">
               <h2 className="text-xl font-semibold text-white">{post.title}</h2>
               <p className="text-gray-400">By {post.author}</p>

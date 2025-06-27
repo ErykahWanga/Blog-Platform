@@ -19,9 +19,15 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^3.0.0",
+<<<<<<< HEAD
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.14"
+=======
+    "autoprefixer": "^10.3.0",
+    "postcss": "^8.3.0",
+    "tailwindcss": "^3.0.0"
+>>>>>>> 7eaf4fd85af37d051b40e6d1a4fbc27104e1e420
   },
   "engines": {
     "node": "18.x"

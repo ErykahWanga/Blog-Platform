@@ -1,139 +1,92 @@
+import React from 'react';
 import { useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
+import axios from 'axios';
 
 function AddPost({ onAddPost }) {
-  
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [author, setAuthor] = useState('');
   const [image, setImage] = useState('');
 
- 
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
- 
-  const API_URL = 'https://json-server-vercel-last.vercel.app/posts/';
+  const API_URL = 'http://127.0.0.1:5000/posts/'; // Your Flask backend endpoint
+  const token = localStorage.getItem('token');    // JWT stored on login
 
-  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-   
+    if (!token) {
+      setError("You must be logged in to post.");
+      return;
+    }
+
     const newPost = {
       title,
       content,
-      author,
-      image: image || undefined, 
-      isFavorite: false,        
-      comments: [],           
+      image
     };
 
-    setIsLoading(true); 
-    setError(null);     
+    setIsLoading(true);
+    setError(null);
 
     try {
-     
-      const response = await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newPost),
+      const response = await axios.post(API_URL, newPost, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
       });
 
-     
-      if (!response.ok) {
-        throw new Error(`Failed to add post: ${response.status} ${response.statusText}`);
-      }
+      onAddPost(response.data);
 
-      
-      const addedPost = await response.json();
-
-     
-      onAddPost(addedPost);
-
-     
       setTitle('');
       setContent('');
-      setAuthor('');
       setImage('');
     } catch (err) {
       console.error('Add post error:', err);
-      setError(err.message || 'An unexpected error occurred.');
+      setError(err.response?.data?.error || 'Failed to add post');
     } finally {
-      setIsLoading(false); 
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="p-4">
       <h2 className="text-2xl font-bold text-white mb-4">Add a New Post</h2>
-
-    
       {error && <div className="text-red-500 mb-4">{error}</div>}
 
-     
       <form onSubmit={handleSubmit} className="space-y-4">
-      
-        <div>
-          <input
-            type="text"
-            placeholder="Title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="w-full p-2 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          />
-        </div>
-
-       
-        <div>
-          <textarea
-            placeholder="Content"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            className="w-full p-2 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            rows="4"
-            required
-          />
-        </div>
-
-     
-        <div>
-          <input
-            type="text"
-            placeholder="Author"
-            value={author}
-            onChange={(e) => setAuthor(e.target.value)}
-            className="w-full p-2 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          />
-        </div>
-
-       
-        <div>
-          <input
-            type="url"
-            placeholder="Image URL (optional)"
-            value={image}
-            onChange={(e) => setImage(e.target.value)}
-            className="w-full p-2 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
-        
+        <input
+          type="text"
+          placeholder="Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          required
+          className="w-full p-2 rounded bg-gray-900 text-white border border-gray-600"
+        />
+        <textarea
+          placeholder="Content"
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          rows="4"
+          required
+          className="w-full p-2 rounded bg-gray-900 text-white border border-gray-600"
+        />
+        <input
+          type="url"
+          placeholder="Image URL (optional)"
+          value={image}
+          onChange={(e) => setImage(e.target.value)}
+          className="w-full p-2 rounded bg-gray-900 text-white border border-gray-600"
+        />
         <button
           type="submit"
-          disabled={isLoading} 
+          disabled={isLoading}
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 flex items-center space-x-2"
         >
-          {isLoading ? (
-            <>Adding...</>
-          ) : (
-            <>
-              <FaPlus />
-              <span>Add Post</span>
-            </>
-          )}
+          {isLoading ? 'Adding...' : (<><FaPlus /><span>Add Post</span></>)}
         </button>
       </form>
     </div>

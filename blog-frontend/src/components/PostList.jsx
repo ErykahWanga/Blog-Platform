@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
+=======
+import React from 'react';
+import { useState, useEffect } from 'react';
+>>>>>>> 7eaf4fd85af37d051b40e6d1a4fbc27104e1e420
 import { FaComment, FaStar, FaEdit, FaTrash } from 'react-icons/fa';
 
 function PostList() {
@@ -12,7 +17,8 @@ function PostList() {
   const [expandedPosts, setExpandedPosts] = useState({});
   const [loading, setLoading] = useState(true);
 
-  const API_URL = 'https://json-server-vercel-last.vercel.app/posts/';
+  const API_URL = 'http://localhost:3000/posts';
+
 
   useEffect(() => {
     const fetchPosts = async () => {

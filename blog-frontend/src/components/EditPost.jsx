@@ -1,27 +1,32 @@
+import React from 'react';
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function EditPost() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const token = localStorage.getItem('token');
+
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [author, setAuthor] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [image, setImage] = useState('');
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const API_URL = `http://127.0.0.1:5000/posts/${id}`;
 
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await fetch(`https://json-server-vercel-last.vercel.app/posts/${id}`);
-        if (!response.ok) throw new Error('Failed to fetch post');
-        const data = await response.json();
+        const response = await axios.get(API_URL);
+        const data = response.data;
         setTitle(data.title);
         setContent(data.content);
-        setAuthor(data.author);
+        setImage(data.image || '');
         setLoading(false);
       } catch (err) {
-        setError(err.message);
+        setError('Failed to fetch post');
         setLoading(false);
       }
     };
@@ -30,16 +35,22 @@ function EditPost() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!token) {
+      setError('You must be logged in to update a post.');
+      return;
+    }
+
     try {
-      const response = await fetch(`https://json-server-vercel-last.vercel.app/posts/${id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, content, author }),
+      await axios.put(API_URL, { title, content, image }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
       });
-      if (!response.ok) throw new Error('Failed to update post');
       navigate('/');
     } catch (err) {
-      setError(err.message);
+      setError(err.response?.data?.error || 'Failed to update post');
     }
   };
 
@@ -49,40 +60,35 @@ function EditPost() {
   return (
     <div className="max-w-lg mx-auto p-4">
       <h1 className="text-3xl font-bold text-white mb-6">Edit Post</h1>
-      {error && <div className="text-red-500 mb-4">{error}</div>}
       <form onSubmit={handleSubmit}>
         <div className="bg-gray-800 p-6 rounded shadow border border-gray-700">
           <div className="mb-4">
-            <label className="block text-gray-300 mb-2" htmlFor="title">Title</label>
+            <label className="block text-gray-300 mb-2">Title</label>
             <input
               type="text"
-              id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full p-2 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-2 rounded bg-gray-900 text-white border border-gray-600"
               required
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-300 mb-2" htmlFor="content">Content</label>
+            <label className="block text-gray-300 mb-2">Content</label>
             <textarea
-              id="content"
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              className="w-full p-2 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-2 rounded bg-gray-900 text-white border border-gray-600"
               rows="5"
               required
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-300 mb-2" htmlFor="author">Author</label>
+            <label className="block text-gray-300 mb-2">Image URL (optional)</label>
             <input
-              type="text"
-              id="author"
-              value={author}
-              onChange={(e) => setAuthor(e.target.value)}
-              className="w-full p-2 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
+              type="url"
+              value={image}
+              onChange={(e) => setImage(e.target.value)}
+              className="w-full p-2 rounded bg-gray-900 text-white border border-gray-600"
             />
           </div>
           <button
