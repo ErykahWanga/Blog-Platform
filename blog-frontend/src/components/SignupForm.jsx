@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 
 function SignupForm() {
@@ -9,14 +9,28 @@ function SignupForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+
     try {
-      await axios.post('http://127.0.0.1:5000/auth/signup', {
+      const res = await axios.get(`http://localhost:3000/users?email=${email}`);
+      if (res.data.length > 0) {
+        setMessage('User with this email already exists.');
+        return;
+      }
+
+      
+      await axios.post('http://localhost:3000/users', {
         username,
         email,
         password,
       });
+
       setMessage('Signup successful! You can now log in.');
+      setUsername('');
+      setEmail('');
+      setPassword('');
     } catch (err) {
+      console.error(err);
       setMessage('Signup failed. Please try again.');
     }
   };
@@ -25,11 +39,13 @@ function SignupForm() {
     <form onSubmit={handleSubmit} className="p-4 bg-gray-800 text-white rounded-lg">
       <h2 className="text-xl mb-4">Sign Up</h2>
       {message && <p className="mb-2 text-blue-400">{message}</p>}
+
       <input
         type="text"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
         placeholder="Username"
+        required
         className="w-full mb-2 p-2 rounded bg-gray-900 border border-gray-600"
       />
       <input
@@ -37,6 +53,7 @@ function SignupForm() {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="Email"
+        required
         className="w-full mb-2 p-2 rounded bg-gray-900 border border-gray-600"
       />
       <input
@@ -44,8 +61,10 @@ function SignupForm() {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Password"
+        required
         className="w-full mb-4 p-2 rounded bg-gray-900 border border-gray-600"
       />
+
       <button type="submit" className="w-full bg-green-500 hover:bg-green-600 p-2 rounded">
         Sign Up
       </button>

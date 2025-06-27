@@ -37,9 +37,8 @@ def login():
 
     user = User.query.filter_by(email=email).first()
 
-    if user and user.check_password(password):
+    if user and user.check_password(password):  # <--- CRUCIAL!
         access_token = create_access_token(identity=user.id, expires_delta=timedelta(days=1))
         return jsonify({"access_token": access_token, "user": user.to_dict()}), 200
-    else:
-        return jsonify({"error": "Invalid email or password"}), 401
 
+    return jsonify({"error": "Invalid email or password"}), 401
