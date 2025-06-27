@@ -3,10 +3,10 @@ from flask_jwt_extended import create_access_token
 from datetime import timedelta
 from server.models.user import User
 from server.extensions import db
+from werkzeug.security import generate_password_hash, check_password_hash
 
-auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
+auth_bp = Blueprint("auth", __name__)
 
-# Signup route
 @auth_bp.route("/signup", methods=["POST"])
 def signup():
     data = request.get_json()
@@ -21,14 +21,14 @@ def signup():
         return jsonify({"error": "Email already registered"}), 409
 
     new_user = User(username=username, email=email)
-    new_user.set_password(password)  
+    new_user.set_password(password)
 
     db.session.add(new_user)
     db.session.commit()
 
     return jsonify({"message": "User created successfully"}), 201
 
-# Login route
+
 @auth_bp.route("/login", methods=["POST"])
 def login():
     data = request.get_json()
@@ -37,8 +37,9 @@ def login():
 
     user = User.query.filter_by(email=email).first()
 
-    if user and user.check_password(password):  # ✅ Use method from model
+    if user and user.check_password(password):
         access_token = create_access_token(identity=user.id, expires_delta=timedelta(days=1))
         return jsonify({"access_token": access_token, "user": user.to_dict()}), 200
     else:
         return jsonify({"error": "Invalid email or password"}), 401
+
